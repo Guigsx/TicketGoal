@@ -1,0 +1,44 @@
+<header>
+    <h1>TicketGoal - Compre seus Ingressos</h1>
+</header>
+<main>
+    <section class="intro">
+        <h2>Bem-vindo ao TicketGoal!</h2>
+        <p>O lugar perfeito para garantir seus ingressos para os melhores jogos de futebol. Não perca a emocionante
+            partida que acontecerá em 15 de outubro de 2023 no Estádio Principal. Compre seu ingresso agora!</p>
+    </section>
+    <section class="game-info">
+        <h2>Jogo de Futebol - Partida Imperdível</h2>
+        <p>Data: 25 de novembro de 2023</p>
+        <p>Local: Estádio Aurora</p>
+        <p>Times:</p>
+        <ul>
+            <li>Time da Casa: Flecha Dourada</li>
+            <li>Time Visitante: Leões de Aço</li>
+        </ul>
+        <a href="#ticket-form" class="buy-button">Compre seu Ingresso</a>
+    </section>
+    <section class="ticket-form" id="ticket-form">
+        <h2>Compre seu Ingresso</h2>
+        <form action="processar_venda.php" method="POST">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" required>
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="assentos">Selecione seus Assentos:</label>
+            <select id="assentos" name="assentos" required>
+                <option value="A">Setor A</option>
+                <option value="B">Setor B</option>
+                <option value="C">Setor C</option>
+                <option value="D">Setor D</option>
+            </select>
+            <span id="valor-ingresso">Valor do Ingresso: R$ 0,00</span><br><br>
+            <button type="submit">Comprar Ingresso</button>
+        </form>
+    </section>
+</main>
+<footer>
+    <p>&copy; 2023 TicketGoal</p>
+</footer>
+<script src="index.js"></script>

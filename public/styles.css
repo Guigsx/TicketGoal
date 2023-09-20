@@ -1,0 +1,128 @@
+body {
+    font-family: ui-sans-serif, 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: rgb(26, 26, 26);
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}
+
+main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.intro {
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.game-info {
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.game-info h2 {
+    color: #007bff;
+}
+
+.game-info p {
+    margin-bottom: 10px;
+}
+
+.game-info ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.game-info ul li {
+    margin-bottom: 5px;
+}
+
+.buy-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.buy-button:hover {
+    background-color: #0056b3;
+}
+
+.ticket-form {
+    background-color: rgba(0, 123, 255, 0.2);
+    border: 1px solid #007bff;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #007bff;
+}
+
+input {
+    width: 97%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #007bff;
+}
+
+footer {
+    background-color: rgb(26, 26, 26);
+    text-align: center;
+    padding: 10px 0;
+    color: white;
+    font-weight: 700;
+}
+
+label[for="assentos"] {
+    display: block;
+    margin-bottom: 5px;
+    color: #007bff;
+}
+
+select#assentos {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+span#valor-ingresso {
+    font-weight: 700;
+    font-size: 18px;
+    margin: 10px;
+}
