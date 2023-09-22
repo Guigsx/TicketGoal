@@ -1,0 +1,18 @@
+<header>
+    <h1>Confirmação de Pagamento</h1>
+</header>
+<main>
+    <section class="confirmation">
+        <h2>Obrigado por comprar seu ingresso!</h2>
+        <p>Detalhes da compra:</p>
+        <ul>
+            <li><strong>Nome:</strong> {{compra.nome}}</li>
+            <li><strong>E-mail:</strong> {{compra.email}}</li>
+            <li><strong>Asento:</strong> {{compra.assento}}</li>
+            <li><strong>Valor Total:</strong> {{compra.valorTotal}}</li>
+            <li><strong>Código do ingresso:</strong> {{compra.codigo}}</li>
+        </ul>
+        <p>Seu ingresso foi reservado com sucesso. Continue para o pagamento.</p>
+        <a href="/realizar-pagamento" class="buy-button">Realizar Pagamento</a>
+    </section>
+</main>

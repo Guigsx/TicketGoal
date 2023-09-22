@@ -1,6 +1,4 @@
-// Adicione este código JavaScript
 document.addEventListener("DOMContentLoaded", function () {
-    // Defina os valores dos ingressos para cada setor (pode vir do servidor)
     const valoresIngresso = {
         A: 50.00,
         B: 40.00,
@@ -11,12 +9,21 @@ document.addEventListener("DOMContentLoaded", function () {
     const assentosSelect = document.getElementById("assentos");
     const valorIngressoSpan = document.getElementById("valor-ingresso");
 
-    // Adicione um ouvinte de evento à seleção de setor
     assentosSelect.addEventListener("change", function () {
         const setorSelecionado = assentosSelect.value;
-        const valorIngresso = valoresIngresso[setorSelecionado] || 0.00; // Valor padrão se não for encontrado
+        const valorIngresso = valoresIngresso[setorSelecionado] || 0.00;
 
-        // Atualize o texto exibido com o valor do ingresso selecionado
         valorIngressoSpan.textContent = `Valor do Ingresso: R$ ${valorIngresso.toFixed(2)}`;
     });
+});
+
+document.getElementById("comprar-form").addEventListener("submit", function (event) {
+    const nome = document.getElementById("nome").value;
+    const email = document.getElementById("email").value;
+    const setor = document.getElementById("setor").value;
+
+    if (nome === "" || email === "" || setor === "Nenhum") {
+        alert("Por favor, preencha todos os campos antes de comprar o ingresso.");
+        event.preventDefault();
+    }
 });

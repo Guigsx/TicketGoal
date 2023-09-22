@@ -25,6 +25,29 @@ app.get('/', (req, res) => {
     res.render('geral/home')
 })
 
+app.post('/pagamento', (req, res) => {
+    const nome = req.body.nome;
+    const email = req.body.email;
+    const setor = req.body.setor;
+    
+    const valoresIngresso = {
+        A: 50.00,
+        B: 40.00,
+        C: 35.00,
+        D: 30.00
+    };
+
+    const compra = {
+        nome: nome,
+        email: email,
+        assento: `12${setor}`,
+        valorTotal: `R$ ${valoresIngresso[setor]}`,
+        codigo: '395260656875733002'
+    }
+
+    res.render('geral/pagamento', { compra });
+});
+
 app.listen(porta, () => {
     console.log(`Servidor online!`);
 })

@@ -107,22 +107,44 @@ footer {
     font-weight: 700;
 }
 
-label[for="assentos"] {
+label[for="setor"] {
     display: block;
     margin-bottom: 5px;
     color: #007bff;
 }
 
-select#assentos {
+select#setor {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    cursor: pointer;
 }
 
 span#valor-ingresso {
     font-weight: 700;
     font-size: 18px;
     margin: 10px;
+}
+
+.confirmation {
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.confirmation h2 {
+    color: #007bff;
+}
+
+.confirmation ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.confirmation ul li {
+    margin-bottom: 10px;
 }
