@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
         D: 30.00
     };
 
-    const assentosSelect = document.getElementById("assentos");
+    const assentosSelect = document.getElementById("setor"); // Corrigido para corresponder ao ID correto
     const valorIngressoSpan = document.getElementById("valor-ingresso");
 
     assentosSelect.addEventListener("change", function () {
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-document.getElementById("comprar-form").addEventListener("submit", function (event) {
+document.getElementById("ticket-form").addEventListener("submit", function (event) { // Corrigido para corresponder ao ID correto
     const nome = document.getElementById("nome").value;
     const email = document.getElementById("email").value;
     const setor = document.getElementById("setor").value;
