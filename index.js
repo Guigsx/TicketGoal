@@ -5,6 +5,7 @@ const path = require('path')
 const session = require('express-session')
 const uuid = require('uuid');
 const mercadopago = require('mercadopago');
+const fs = require('fs')
 const porta = 2000
 
 app.engine('handlebars', handlebars.engine({ defaultLayout: 'main' }));
@@ -19,7 +20,7 @@ app.use(
         secret: 'root',
         resave: true,
         saveUninitialized: true,
-        cookie: { secure: false }, // Em ambiente de desenvolvimento, altere para 'false'
+        cookie: { secure: false },
     })
 );
 
@@ -57,19 +58,53 @@ app.post('/pagamento', (req, res) => {
     res.render('geral/pagamento', { compra });
 });
 
+function saveData(compra, ip, paymentID) {
+    fs.readFile('./database/dados.json', 'utf8', (err, data) => {
+        if (err) {
+            console.error('Erro ao ler o arquivo de dados:', err);
+            return;
+        }
+
+        let dados = {};
+
+        if (data) {
+            try {
+                dados = JSON.parse(data);
+            } catch (error) {
+                console.error('Erro ao analisar dados JSON:', error);
+                return;
+            }
+        }
+
+        dados[ip] = {
+            nome: compra.nome,
+            email: compra.email,
+            setor: compra.setor,
+            assento: compra.assento,
+            valorTotal: compra.valorTotal,
+            codigo: compra.codigo,
+            pagamentoAprovado: false, // Define como pagamento não aprovado
+            pagamentoId: paymentID, // ID do pagamento no Mercado Pago
+        };
+
+        fs.writeFile('./database/dados.json', JSON.stringify(dados, null, 2), 'utf8', (err) => {
+            if (err) {
+                console.error('Erro ao escrever o arquivo de dados:', err);
+                return;
+            }
+            console.log('Dados da compra e ID do pagamento foram salvos com sucesso.');
+        });
+    });
+}
+
 app.post('/processar-pagamento', (req, res) => {
     const nome = req.body.nome;
     const email = req.body.email;
     const setor = req.body.setor;
+    const ip = req.ip;
+    const paymentID = response.body.id;
     const codigoIngresso = uuid.v4();
     const numeroAssento = 10;
-
-    const valoresIngresso = {
-        A: 50,
-        B: 40,
-        C: 35,
-        D: 30
-    };
 
     const compra = {
         nome: nome,
@@ -80,13 +115,14 @@ app.post('/processar-pagamento', (req, res) => {
         codigo: codigoIngresso,
     };
 
+    console.log('Uma nova possível compra:', ip, compra);
+
     const pagamentoMercadoPago = {
         items: [
             {
                 title: 'Ingresso para Evento',
                 quantity: 1,
-                currency_id: 'BRL',
-                unit_price: compra.valorTotal,
+                unit_price: valoresIngresso[setor],
             },
         ],
     };
@@ -94,6 +130,7 @@ app.post('/processar-pagamento', (req, res) => {
     mercadopago.preferences
         .create(pagamentoMercadoPago)
         .then((response) => {
+            saveData(compra, ip, paymentID);
             res.redirect(response.body.init_point);
         })
         .catch((error) => {
