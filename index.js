@@ -33,10 +33,10 @@ app.get('/', (req, res) => {
 })
 
 const valoresIngresso = {
-    A: 50,
-    B: 40,
-    C: 35,
-    D: 30
+    A: 0.5,
+    B: 0.4,
+    C: 0.35,
+    D: 0.3
 };
 
 app.post('/pagamento', (req, res) => {
@@ -76,7 +76,17 @@ function saveData(compra, ip, paymentID) {
             }
         }
 
-        dados[ip] = {
+        if (!dados[ip]) {
+            dados[ip] = {};
+        }
+
+        const ipData = dados[ip];
+
+        if (!ipData.compra) {
+            ipData.compra = [];
+        }
+
+        const novaCompra = {
             nome: compra.nome,
             email: compra.email,
             setor: compra.setor,
@@ -86,6 +96,8 @@ function saveData(compra, ip, paymentID) {
             pagamentoAprovado: false, // Define como pagamento não aprovado
             pagamentoId: paymentID, // ID do pagamento no Mercado Pago
         };
+
+        ipData.compra.push(novaCompra);
 
         fs.writeFile('./database/dados.json', JSON.stringify(dados, null, 2), 'utf8', (err) => {
             if (err) {
@@ -102,7 +114,6 @@ app.post('/processar-pagamento', (req, res) => {
     const email = req.body.email;
     const setor = req.body.setor;
     const ip = req.ip;
-    const paymentID = response.body.id;
     const codigoIngresso = uuid.v4();
     const numeroAssento = 10;
 
@@ -125,11 +136,15 @@ app.post('/processar-pagamento', (req, res) => {
                 unit_price: valoresIngresso[setor],
             },
         ],
+        payer: {
+            email: email,
+        },
     };
 
     mercadopago.preferences
         .create(pagamentoMercadoPago)
         .then((response) => {
+            const paymentID = response.body.id;
             saveData(compra, ip, paymentID);
             res.redirect(response.body.init_point);
         })
@@ -138,6 +153,7 @@ app.post('/processar-pagamento', (req, res) => {
             res.status(500).send('Erro ao processar pagamento');
         });
 });
+
 
 app.listen(porta, () => {
     console.log(`Servidor online!`);
