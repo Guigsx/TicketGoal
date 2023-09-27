@@ -145,6 +145,7 @@ app.post('/processar-pagamento', (req, res) => {
         .create(pagamentoMercadoPago)
         .then((response) => {
             const paymentID = response.body.id;
+            console.log(response);
             saveData(compra, ip, paymentID);
             res.redirect(response.body.init_point);
         })
@@ -154,6 +155,26 @@ app.post('/processar-pagamento', (req, res) => {
         });
 });
 
+app.post('/notificacao-pagamento', (req, res) => {
+    const payment = req.body;
+    const clientIp = req.ip;
+
+    const authorizedIps = ['172.31.196.1', '::ffff:172.31.196.1'];
+
+    if (!authorizedIps.includes(clientIp)) {
+        console.log('Tentativa de notificação de IP não autorizado:', clientIp);
+        return res.sendStatus(403);
+    }
+
+    console.log('Pagamento recebido de IP autorizado:', clientIp);
+    console.log(payment);
+
+    if (payment.action === 'payment.updated') {
+        console.log('Pagamento aprovado.');
+    }
+    console.log(req);
+    res.sendStatus(200);
+});
 
 app.listen(porta, () => {
     console.log(`Servidor online!`);
