@@ -25,7 +25,8 @@ app.use(
 );
 
 mercadopago.configure({
-    access_token: 'APP_USR-480121886035342-091514-cb35bc42e8deeedfa47eb30485dad3d5-1255551541'
+    sandbox: true, // Modo desenvolvimento
+    access_token: 'TEST-480121886035342-091514-97dd2e504361cbd467e0e948656ce7fd-1255551541'
 })
 
 app.get('/', (req, res) => {
@@ -33,12 +34,18 @@ app.get('/', (req, res) => {
 })
 
 const valoresIngresso = {
-    A: 0.5,
-    B: 0.4,
-    C: 0.35,
-    D: 0.3
+    A: 50,
+    B: 40,
+    C: 35,
+    D: 30
 };
 
+var database = {
+    payments: [
+    ]
+}
+
+//Aqui irá mostrar todas as informações da compra e por fim o usuário pode seguir com a compra.
 app.post('/pagamento', (req, res) => {
     const nome = req.body.nome;
     const email = req.body.email;
@@ -58,57 +65,7 @@ app.post('/pagamento', (req, res) => {
     res.render('geral/pagamento', { compra });
 });
 
-function saveData(compra, ip, paymentID) {
-    fs.readFile('./database/dados.json', 'utf8', (err, data) => {
-        if (err) {
-            console.error('Erro ao ler o arquivo de dados:', err);
-            return;
-        }
-
-        let dados = {};
-
-        if (data) {
-            try {
-                dados = JSON.parse(data);
-            } catch (error) {
-                console.error('Erro ao analisar dados JSON:', error);
-                return;
-            }
-        }
-
-        if (!dados[ip]) {
-            dados[ip] = {};
-        }
-
-        const ipData = dados[ip];
-
-        if (!ipData.compra) {
-            ipData.compra = [];
-        }
-
-        const novaCompra = {
-            nome: compra.nome,
-            email: compra.email,
-            setor: compra.setor,
-            assento: compra.assento,
-            valorTotal: compra.valorTotal,
-            codigo: compra.codigo,
-            pagamentoAprovado: false, // Define como pagamento não aprovado
-            pagamentoId: paymentID, // ID do pagamento no Mercado Pago
-        };
-
-        ipData.compra.push(novaCompra);
-
-        fs.writeFile('./database/dados.json', JSON.stringify(dados, null, 2), 'utf8', (err) => {
-            if (err) {
-                console.error('Erro ao escrever o arquivo de dados:', err);
-                return;
-            }
-            console.log('Dados da compra e ID do pagamento foram salvos com sucesso.');
-        });
-    });
-}
-
+//Aqui o pagamento será criado.
 app.post('/processar-pagamento', (req, res) => {
     const nome = req.body.nome;
     const email = req.body.email;
@@ -126,7 +83,7 @@ app.post('/processar-pagamento', (req, res) => {
         codigo: codigoIngresso,
     };
 
-    console.log('Uma nova possível compra:', ip, compra);
+    console.log(compra);
 
     const pagamentoMercadoPago = {
         items: [
@@ -144,9 +101,13 @@ app.post('/processar-pagamento', (req, res) => {
     mercadopago.preferences
         .create(pagamentoMercadoPago)
         .then((response) => {
-            const paymentID = response.body.id;
-            console.log(response);
-            saveData(compra, ip, paymentID);
+            database.payments.push({
+                email: email,
+                id_payment: codigoIngresso,
+                name: 'ingresso',
+                price: valoresIngresso[setor],
+                status: 'A pagar'
+            })
             res.redirect(response.body.init_point);
         })
         .catch((error) => {
@@ -155,26 +116,42 @@ app.post('/processar-pagamento', (req, res) => {
         });
 });
 
-app.post('/notificacao-pagamento', (req, res) => {
-    const payment = req.body;
-    const clientIp = req.ip;
+//Aqui o mercadopago irá retornar se o pagamento foi efetuado ou não.
+app.post('/notify', (req, res) => {
+    const id = req.query.id;
+    console.log('chegou!', id)
 
-    const authorizedIps = ['172.31.196.1', '::ffff:172.31.196.1'];
+    setTimeout(() => {
+        const filtro = { "order.id": id }
 
-    if (!authorizedIps.includes(clientIp)) {
-        console.log('Tentativa de notificação de IP não autorizado:', clientIp);
-        return res.sendStatus(403);
-    }
+        // Verifica se o pagamento está no banco de dados do mercado pago
+        mercadopago.payment.search({
+            qs: filtro
+        }).then(data => {
+            // Pagamento está no banco de dados
+            var payment = data.body.results[0];
+            if (payment != undefined) {
+                if (payment.status === 'approved') {
+                    let id_payment = database.payments.findIndex(pay => pay.id_payment == payment.external_reference);
+                    if (id_payment !== -1) {
+                        database.payments[id_payment].status = 'Pago';
+                        console.log('Pagamento aprovado:', payment.external_reference);
+                    } else {
+                        console.log('ID de pagamento não encontrado no banco de dados fictício');
+                    }
+                } else {
+                    console.log('Pagamento não aprovado!', payment.status);
+                }
+            } else {
+                console.log('Pagamento não existe!', payment);
+            }
+        }).catch(error => {
+            console.log(error);
+        });
+    }, 20000)
 
-    console.log('Pagamento recebido de IP autorizado:', clientIp);
-    console.log(payment);
-
-    if (payment.action === 'payment.updated') {
-        console.log('Pagamento aprovado.');
-    }
-    console.log(req);
-    res.sendStatus(200);
-});
+    res.send('ok');
+})
 
 app.listen(porta, () => {
     console.log(`Servidor online!`);
