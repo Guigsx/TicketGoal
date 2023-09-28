@@ -65,12 +65,32 @@ app.post('/pagamento', (req, res) => {
     res.render('geral/pagamento', { compra });
 });
 
+//função que salva os dados do pagamento no banco de dados local.
+function saveData(data) {
+    const dados = {
+        [data.id_payment]: {
+            name: data.name,
+            price: data.price,
+            status: data.status,
+            email: data.email
+        }
+    }
+    console.log(dados);
+
+    try {
+        const jsonData = JSON.stringify(dados, null, 2); 
+        fs.writeFileSync('./database/dados.json', jsonData);
+        console.log('Dados salvos com sucesso!');
+    } catch (error) {
+        console.log('Houve um erro ao salvar os dados no banco de dados.');
+    } 
+}
+
 //Aqui o pagamento será criado.
 app.post('/processar-pagamento', (req, res) => {
     const nome = req.body.nome;
     const email = req.body.email;
     const setor = req.body.setor;
-    const ip = req.ip;
     const codigoIngresso = uuid.v4();
     const numeroAssento = 10;
 
@@ -102,25 +122,27 @@ app.post('/processar-pagamento', (req, res) => {
     mercadopago.preferences
         .create(pagamentoMercadoPago)
         .then((response) => {
-            database.payments.push({
+            const dados = {
                 email: email,
                 id_payment: codigoIngresso,
                 name: 'ingresso',
                 price: valoresIngresso[setor],
                 status: 'A pagar'
-            })
+            }
+            database.payments.push(dados)
+            saveData(dados)
             res.redirect(response.body.init_point);
         })
         .catch((error) => {
             console.error('Erro ao criar pagamento no Mercado Pago:', error);
             res.status(500).send('Erro ao processar pagamento');
-        });
+        })
 });
 
 //Aqui o mercadopago irá retornar se o pagamento foi efetuado ou não.
 app.post('/notify', (req, res) => {
     const id = req.query.id;
-    console.log('chegou!', id)
+    console.log('Novo pagamento recebido!', req.query)
 
     setTimeout(() => {
         const filtro = { "order.id": id }
@@ -137,6 +159,7 @@ app.post('/notify', (req, res) => {
                     if (id_payment !== -1) {
                         database.payments[id_payment].status = 'Pago';
                         console.log('Pagamento aprovado:', payment.external_reference);
+                        console.log('Valor da compra: ' + payment.transaction_details.total_paid_amount);
                     } else {
                         console.log('ID de pagamento não encontrado no banco de dados fictício');
                     }
