@@ -67,23 +67,28 @@ app.post('/pagamento', (req, res) => {
 
 //função que salva os dados do pagamento no banco de dados local.
 function saveData(data) {
-    const dados = {
-        [data.id_payment]: {
+    try {
+        // Lê o conteúdo atual do arquivo JSON
+        const currentData = fs.readFileSync('./database/dados.json', 'utf8');
+        const parsedData = JSON.parse(currentData);
+
+        // Adiciona ou atualiza os dados com base no data.id_payment
+        parsedData[data.id_payment] = {
             name: data.name,
             price: data.price,
             status: data.status,
             email: data.email
-        }
-    }
-    console.log(dados);
+        };
 
-    try {
-        const jsonData = JSON.stringify(dados, null, 2); 
-        fs.writeFileSync('./database/dados.json', jsonData);
+        // Converte os dados atualizados em uma string JSON
+        const updatedData = JSON.stringify(parsedData, null, 2);
+
+        // Escreve os dados atualizados de volta no arquivo JSON
+        fs.writeFileSync('./database/dados.json', updatedData);
         console.log('Dados salvos com sucesso!');
     } catch (error) {
-        console.log('Houve um erro ao salvar os dados no banco de dados.');
-    } 
+        console.log('Houve um erro ao salvar os dados no banco de dados.', error);
+    }
 }
 
 //Aqui o pagamento será criado.
@@ -155,14 +160,34 @@ app.post('/notify', (req, res) => {
             var payment = data.body.results[0];
             if (payment != undefined) {
                 if (payment.status === 'approved') {
-                    let id_payment = database.payments.findIndex(pay => pay.id_payment == payment.external_reference);
-                    if (id_payment !== -1) {
-                        database.payments[id_payment].status = 'Pago';
-                        console.log('Pagamento aprovado:', payment.external_reference);
-                        console.log('Valor da compra: ' + payment.transaction_details.total_paid_amount);
-                    } else {
-                        console.log('ID de pagamento não encontrado no banco de dados fictício');
-                    }
+                    // Lê os dados do arquivo JSON existente
+                    fs.readFile('./database/dados.json', 'utf8', (err, jsonData) => {
+                        if (err) {
+                            console.log('Erro ao ler o arquivo JSON:', err);
+                            return;
+                        }
+
+                        try {
+                            const dados = JSON.parse(jsonData);
+
+                            // Atualiza o status do pagamento no objeto 'dados'
+                            //hasOwnProperty verifica se há alguma propiedade com igual no array
+                            if (dados.hasOwnProperty(payment.external_reference)) {
+                                dados[payment.external_reference].status = 'Pago';
+
+                                // Salva os dados atualizados de volta no arquivo JSON
+                                const updatedJsonData = JSON.stringify(dados, null, 2);
+                                fs.writeFileSync('./database/dados.json', updatedJsonData);
+
+                                console.log('Pagamento aprovado:', payment.external_reference);
+                                console.log(dados[payment.external_reference].email);
+                            } else {
+                                console.log('ID de pagamento não encontrado no arquivo JSON');
+                            }
+                        } catch (error) {
+                            console.log('Erro ao analisar o arquivo JSON:', error);
+                        }
+                    });
                 } else {
                     console.log('Pagamento não aprovado!', payment.status);
                 }
