@@ -96,6 +96,7 @@ app.post('/processar-pagamento', (req, res) => {
         payer: {
             email: email,
         },
+        external_reference: codigoIngresso
     };
 
     mercadopago.preferences
