@@ -29,10 +29,6 @@ mercadopago.configure({
     access_token: 'TEST-480121886035342-091514-97dd2e504361cbd467e0e948656ce7fd-1255551541'
 })
 
-app.get('/', (req, res) => {
-    res.render('geral/home')
-})
-
 const valoresIngresso = {
     A: 50,
     B: 40,
@@ -40,10 +36,36 @@ const valoresIngresso = {
     D: 30
 };
 
-var database = {
-    payments: [
-    ]
+//função que salva os dados do pagamento no banco de dados local.
+function saveData(data) {
+    try {
+        // Lê o conteúdo atual do arquivo JSON
+        const currentData = fs.readFileSync('./database/dados.json', 'utf8');
+        const parsedData = JSON.parse(currentData);
+
+        // Adiciona ou atualiza os dados com base no data.id_payment
+        parsedData[data.id_payment] = {
+            name: data.name,
+            price: data.price,
+            status: data.status,
+            email: data.email,
+            nome: data.nome
+        };
+
+        // Converte os dados atualizados em uma string JSON
+        const updatedData = JSON.stringify(parsedData, null, 2);
+
+        // Escreve os dados atualizados de volta no arquivo JSON
+        fs.writeFileSync('./database/dados.json', updatedData);
+        console.log('Dados salvos com sucesso!');
+    } catch (error) {
+        console.log('Houve um erro ao salvar os dados no banco de dados.', error);
+    }
 }
+
+app.get('/', (req, res) => {
+    res.render('geral/home')
+})
 
 //Aqui irá mostrar todas as informações da compra e por fim o usuário pode seguir com a compra.
 app.post('/pagamento', (req, res) => {
@@ -64,32 +86,6 @@ app.post('/pagamento', (req, res) => {
 
     res.render('geral/pagamento', { compra });
 });
-
-//função que salva os dados do pagamento no banco de dados local.
-function saveData(data) {
-    try {
-        // Lê o conteúdo atual do arquivo JSON
-        const currentData = fs.readFileSync('./database/dados.json', 'utf8');
-        const parsedData = JSON.parse(currentData);
-
-        // Adiciona ou atualiza os dados com base no data.id_payment
-        parsedData[data.id_payment] = {
-            name: data.name,
-            price: data.price,
-            status: data.status,
-            email: data.email
-        };
-
-        // Converte os dados atualizados em uma string JSON
-        const updatedData = JSON.stringify(parsedData, null, 2);
-
-        // Escreve os dados atualizados de volta no arquivo JSON
-        fs.writeFileSync('./database/dados.json', updatedData);
-        console.log('Dados salvos com sucesso!');
-    } catch (error) {
-        console.log('Houve um erro ao salvar os dados no banco de dados.', error);
-    }
-}
 
 //Aqui o pagamento será criado.
 app.post('/processar-pagamento', (req, res) => {
@@ -130,11 +126,11 @@ app.post('/processar-pagamento', (req, res) => {
             const dados = {
                 email: email,
                 id_payment: codigoIngresso,
-                name: 'ingresso',
+                name: `Ingresso para o evento - ${numeroAssento + setor}`,
                 price: valoresIngresso[setor],
-                status: 'A pagar'
+                status: 'Pendente',
+                nome: nome
             }
-            database.payments.push(dados)
             saveData(dados)
             res.redirect(response.body.init_point);
         })
@@ -201,6 +197,18 @@ app.post('/notify', (req, res) => {
 
     res.send('ok');
 })
+
+app.get('/payments', (req, res) => {
+    try {
+        const rawData = fs.readFileSync('./database/dados.json');
+        const paymentsData = JSON.parse(rawData);
+
+        res.render('geral/payments', { payments: paymentsData });
+    } catch (error) {
+        console.error('Erro ao ler o arquivo:', error);
+        res.status(500).send('Erro ao ler dados de pagamento.');
+    }
+});
 
 app.listen(porta, () => {
     console.log(`Servidor online!`);
