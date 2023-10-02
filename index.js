@@ -6,6 +6,7 @@ const session = require('express-session')
 const uuid = require('uuid');
 const mercadopago = require('mercadopago');
 const fs = require('fs')
+const sendEmail = require('./sendEmail');
 const porta = 2000
 
 app.engine('handlebars', handlebars.engine({ defaultLayout: 'main' }));
@@ -177,6 +178,14 @@ app.post('/notify', (req, res) => {
 
                                 console.log('Pagamento aprovado:', payment.external_reference);
                                 console.log(dados[payment.external_reference].email);
+
+                                const options = {
+                                    from: 'TicketGoal <guilhermeschmitzguii@gmail.com>',
+                                    to: dados[payment.external_reference].email,
+                                    subject: 'Compra de ingresso aprovada!',
+                                    text: `Olá!\n\nSua compra do ingresso para "${dados[payment.external_reference].name}" foi aprovada. Obrigado por sua compra!`
+                                }
+                                sendEmail(options)
                             } else {
                                 console.log('ID de pagamento não encontrado no arquivo JSON');
                             }
