@@ -8,6 +8,7 @@
         <ul>
             <li><strong>Nome:</strong> {{compra.nome}}</li>
             <li><strong>E-mail:</strong> {{compra.email}}</li>
+            <li><strong>Setor:</strong> {{compra.setor}}</li>
             <li><strong>Assento:</strong> {{compra.assento}}</li>
             <li><strong>Código do ingresso:</strong> {{compra.codigo}}</li>
             <li><strong>Valor Total:</strong> {{compra.valorTotal}}</li>
@@ -17,6 +18,7 @@
             <input type="hidden" name="nome" value="{{compra.nome}}">
             <input type="hidden" name="email" value="{{compra.email}}">
             <input type="hidden" name="setor" value="{{compra.setor}}">
+            <input type="hidden" name="assento" value="{{compra.assento}}">
             <button type="submit" class="buy-button">Realizar Pagamento</button>
         </form>
     </section>

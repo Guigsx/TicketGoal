@@ -1,51 +1,9 @@
 {
-    "cfd565bd-dacb-4253-9193-0378e80ea40c": {
-      "name": "Ingresso para o evento - 10A",
-      "price": 50,
-      "status": "Pago",
-      "email": "guilhermeschmitguii@gmail.com",
-      "nome": "Guilherme"
-    },
-    "c2a4e130-c184-4d00-b3f9-7e4e264aa5b1": {
-      "name": "Ingresso para o evento - 10B",
-      "price": 40,
-      "status": "Pendente",
-      "email": "henriqueteste@gmail.com",
-      "nome": "Henrique"
-    },
-    "28163c6d-32bd-4588-90eb-3b171fea3918": {
-      "name": "Ingresso para o evento - 10A",
-      "price": 50,
-      "status": "Pendente",
-      "email": "guilhermeschmitznitro@gmail.com",
-      "nome": "Guilherme"
-    },
-    "cb76f8eb-7306-49a2-af40-d25007074dc9": {
-      "name": "Ingresso para o evento - 10A",
-      "price": 50,
-      "status": "Pendente",
-      "email": "guilhermeschmitznitro@gmai.com",
-      "nome": "Guilherme Hilário"
-    },
-    "53f4e668-854e-4d4a-8285-3b4c7234837b": {
-      "name": "Ingresso para o evento - 10A",
-      "price": 50,
-      "status": "Pago",
-      "email": "guilhermeschmitzguiiffsdfas@gmail.com",
-      "nome": "Guilherme Hilário"
-    },
-    "2a7eab17-a112-4f0f-8bc7-208997e7da9b": {
-      "name": "Ingresso para o evento - 10A",
-      "price": 50,
-      "status": "Pago",
-      "email": "guilhermeschmitznitro@gmail.com",
-      "nome": "Guilherme Hilário"
-    },
-    "b80028ba-71f8-4b5b-97de-cc9c509bdd6a": {
-      "name": "Ingresso para o evento - 10A",
-      "price": 50,
-      "status": "Pago",
-      "email": "guilhermeschmitznitro@gmail.com",
-      "nome": "Guilherme"
-    }
+  "b80028ba-71f8-4b5b-97de-cc9c509bdd6a": {
+    "name": "Ingresso para o evento - 10A",
+    "price": 50,
+    "status": "Pago",
+    "email": "guilhermeschmitznitro@gmail.com",
+    "nome": "Guilherme"
   }
+}

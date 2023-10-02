@@ -7,6 +7,7 @@ const uuid = require('uuid');
 const mercadopago = require('mercadopago');
 const fs = require('fs')
 const sendEmail = require('./sendEmail');
+const assentos = require('./assentos')
 const porta = 2000
 
 app.engine('handlebars', handlebars.engine({ defaultLayout: 'main' }));
@@ -74,13 +75,18 @@ app.post('/pagamento', (req, res) => {
     const email = req.body.email;
     const setor = req.body.setor;
     const codigoIngresso = uuid.v4();
-    const numeroAssento = 10
+    const numeroAssento = assentos.escolherAssento(setor)
+
+    if (numeroAssento === null) {
+        // Não há assentos disponíveis no setor
+        return res.send('Não há assentos disponíveis no setor: ', setor);
+    }
 
     const compra = {
         nome: nome,
         email: email,
         setor: setor,
-        assento: numeroAssento + setor,
+        assento: numeroAssento,
         valorTotal: `R$ ${valoresIngresso[setor]}`,
         codigo: codigoIngresso,
     };
@@ -93,14 +99,15 @@ app.post('/processar-pagamento', (req, res) => {
     const nome = req.body.nome;
     const email = req.body.email;
     const setor = req.body.setor;
+    const numeroAssento = req.body.assento;
     const codigoIngresso = uuid.v4();
-    const numeroAssento = 10;
+    
 
     const compra = {
         nome: nome,
         email: email,
         setor: setor,
-        assento: numeroAssento + setor,
+        assento: numeroAssento,
         valorTotal: valoresIngresso[setor],
         codigo: codigoIngresso,
     };

@@ -179,6 +179,7 @@ span#valor-ingresso {
 .payment-card .Pago {
     width: 100px;
     padding: 5px;
+    margin-top: 5px;
     background-color: green;
     color: white;
     box-shadow: 0px 0px 5px black;
@@ -186,8 +187,9 @@ span#valor-ingresso {
 
 .payment-card .Pendente {
     width: 130px;
-    padding: 3px;
-    background-color: #007bff;
+    padding: 5px;
+    margin-top: 5px;
+    background-color: red;
     color: white;
     box-shadow: 0px 0px 5px black;
 }
