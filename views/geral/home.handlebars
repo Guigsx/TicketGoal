@@ -8,14 +8,16 @@
             partida que acontecerá em 15 de outubro de 2023 no Estádio Principal. Compre seu ingresso agora!</p>
     </section>
     <section class="game-info">
-        <h2>Jogo de Futebol - Partida Imperdível</h2>
-        <p>Data: 25 de novembro de 2023</p>
-        <p>Local: Estádio Aurora</p>
-        <p>Times:</p>
-        <ul>
-            <li>Time da Casa: Flecha Dourada</li>
-            <li>Time Visitante: Leões de Aço</li>
-        </ul>
+        <div class="boxs">
+            <div class="box">
+                <h2>Eventos:</h2>
+                <p>Data: {{datas.eventos.data}}</p>
+                <p>Partida:</p>
+                <ul>
+                    <li>{{datas.eventos.times.time1}} x {{datas.eventos.times.time2}}</li>
+                </ul>
+            </div>
+        </div>
         <a href="#ticket-form" class="buy-button">Compre seu Ingresso</a>
     </section>
     <section class="ticket-form" id="ticket-form">

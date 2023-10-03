@@ -1,0 +1,14 @@
+<header>
+    <h1>Painel de Controle</h1>
+</header>
+<main>
+    <h1>Configuração da capacidade do estádio</h1>
+    <p>Os setores são denominados por letras (2 setores = A e B), e não é possível configurar a capacidade individualmente.</p>
+    <form action="/admin/salvar" method="POST">
+        <label for="setor">Setores:</label>
+        <input type="number" id="setor" name="setor" required>
+        <label for="assentos">Assentos por setores:</label>
+        <input type="number" id="assentos" name="assentos" required>
+        <button type="submit">Salvar</button>
+    </form>
+</main>

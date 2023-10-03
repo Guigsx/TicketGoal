@@ -8,6 +8,7 @@ const mercadopago = require('mercadopago');
 const fs = require('fs')
 const sendEmail = require('./sendEmail');
 const assentos = require('./assentos')
+const admin = require('./routes/admin');
 const porta = 2000
 
 app.engine('handlebars', handlebars.engine({ defaultLayout: 'main' }));
@@ -66,7 +67,18 @@ function saveData(data) {
 }
 
 app.get('/', (req, res) => {
-    res.render('geral/home')
+    const jsonContent = fs.readFileSync('./database/eventos.json', 'utf8');
+    const dados = JSON.parse(jsonContent)
+    const datas = {
+        eventos: {
+            data: dados.evento.data,
+            times: {
+                time1: dados.evento.time1,
+                time2: dados.evento.time2,
+            }
+        }
+    }
+    res.render('geral/home', { datas: datas })
 })
 
 //Aqui irá mostrar todas as informações da compra e por fim o usuário pode seguir com a compra.
@@ -101,7 +113,7 @@ app.post('/processar-pagamento', (req, res) => {
     const setor = req.body.setor;
     const numeroAssento = req.body.assento;
     const codigoIngresso = uuid.v4();
-    
+
 
     const compra = {
         nome: nome,
@@ -134,7 +146,7 @@ app.post('/processar-pagamento', (req, res) => {
             const dados = {
                 email: email,
                 id_payment: codigoIngresso,
-                name: `Ingresso para o evento - ${numeroAssento + setor}`,
+                name: `Ingresso para o evento - ${numeroAssento}`,
                 price: valoresIngresso[setor],
                 status: 'Pendente',
                 nome: nome
@@ -214,17 +226,7 @@ app.post('/notify', (req, res) => {
     res.send('ok');
 })
 
-app.get('/payments', (req, res) => {
-    try {
-        const rawData = fs.readFileSync('./database/dados.json');
-        const paymentsData = JSON.parse(rawData);
-
-        res.render('geral/payments', { payments: paymentsData });
-    } catch (error) {
-        console.error('Erro ao ler o arquivo:', error);
-        res.status(500).send('Erro ao ler dados de pagamento.');
-    }
-});
+app.use('/admin', admin);
 
 app.listen(porta, () => {
     console.log(`Servidor online!`);
