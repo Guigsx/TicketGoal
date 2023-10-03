@@ -10,6 +10,8 @@ Este projeto tem como objetivo criar um sistema de gerenciamento de eventos com 
 
 - Cadastro e configuração de eventos.
 - Venda de ingressos para eventos.
+- Envio de emails privados.
+- Aprovação de vendas com a API do MercadoPago.
 - Monitoramento de vendas e faturamento.
 - Reserva de assentos para eventos.
 
@@ -25,10 +27,10 @@ Antes de executar o projeto, certifique-se de ter instalado:
 ## Configuração do Projeto
 
 1. Clone este repositório em sua máquina local:
+```
+git clone https://github.com/Guigsx/TicketGoal.gitt
+```
 
-   ```
-   git clone https://github.com/seu-usuario/ticket-goal.git
-   ```
 2. Navegue até o diretório do projeto:
 ```
 cd ticket-goal
