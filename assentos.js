@@ -42,7 +42,6 @@ function escolherAssento(setor) {
 
 function calcularSomaEPrecos() {
     try {
-
         const dadosJSON = fs.readFileSync('./database/dados.json', 'utf8');
         const dados = JSON.parse(dadosJSON);
 
@@ -52,8 +51,7 @@ function calcularSomaEPrecos() {
         for (const key in dados) {
             if (dados.hasOwnProperty(key)) {
                 const item = dados[key];
-                if (item.hasOwnProperty('price')) {
-
+                if (item.hasOwnProperty('price') && item.status === 'Pago') {
                     soma += item.price;
                     quantidade++;
                 }
@@ -66,12 +64,5 @@ function calcularSomaEPrecos() {
         return null;
     }
 }
-
-/*const resultado = calcularSomaEPrecos();
-if (resultado) {
-    console.log(`Total de ${resultado.quantidade} itens. Soma dos preços: R$ ${resultado.soma}`);
-} else {
-    console.log('Erro ao calcular a soma e a quantidade.');
-}*/
 
 module.exports = { escolherAssento, criarAssentos, calcularSomaEPrecos }
