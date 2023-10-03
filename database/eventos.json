@@ -6,9 +6,6 @@
   "evento": {
     "data": "10 de outubro de 2023",
     "time1": "Grêmio",
-    "time2": "Internacional",
-    "faturamento": "300.000",
-    "tickets": 170,
-    "available": 30
+    "time2": "Internacional"
   }
 }

@@ -7,6 +7,9 @@ const assentosModule = require('./../assentos');
 router.get('/', (req, res) => {
     const jsonContent = fs.readFileSync('./database/eventos.json', 'utf8');
     const dados = JSON.parse(jsonContent)
+
+    const resultado = assentosModule.calcularSomaEPrecos();
+
     const datas = {
         capacidade: {
             setores: dados.capacidade.setores,
@@ -19,15 +22,16 @@ router.get('/', (req, res) => {
                 time2: dados.evento.time2,
             },
             vendas: {
-                faturamento: dados.evento.faturamento,
-                tickets: dados.evento.tickets,
-                free: dados.capacidade.assentos - dados.evento.tickets
+                faturamento: resultado.soma,
+                tickets: resultado.quantidade,
+                free: dados.capacidade.assentos - resultado.quantidade
             }
         },
     };
     res.render('admin/admin', { datas: datas })
 });
 
+// Essa rota leva para o formulário para configurar a capacidade do estádio.
 router.get('/configurar', (req, res) => {
     res.render('admin/config')
 })

@@ -40,4 +40,38 @@ function escolherAssento(setor) {
     return null;
 }
 
-module.exports = { escolherAssento, criarAssentos }
+function calcularSomaEPrecos() {
+    try {
+
+        const dadosJSON = fs.readFileSync('./database/dados.json', 'utf8');
+        const dados = JSON.parse(dadosJSON);
+
+        let soma = 0;
+        let quantidade = 0;
+
+        for (const key in dados) {
+            if (dados.hasOwnProperty(key)) {
+                const item = dados[key];
+                if (item.hasOwnProperty('price')) {
+
+                    soma += item.price;
+                    quantidade++;
+                }
+            }
+        }
+
+        return { soma, quantidade };
+    } catch (error) {
+        console.error('Erro ao ler ou processar os dados:', error);
+        return null;
+    }
+}
+
+/*const resultado = calcularSomaEPrecos();
+if (resultado) {
+    console.log(`Total de ${resultado.quantidade} itens. Soma dos preços: R$ ${resultado.soma}`);
+} else {
+    console.log('Erro ao calcular a soma e a quantidade.');
+}*/
+
+module.exports = { escolherAssento, criarAssentos, calcularSomaEPrecos }
