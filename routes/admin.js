@@ -67,7 +67,7 @@ router.get('/configurar', (req, res) => {
 })
 
 // Essa rota salva as informações de capacidade e já cria os assentos no banco de dados.
-router.post('/salvar', (req, res) => {
+router.post('/configurar', (req, res) => {
     try {
         const eventosJSON = fs.readFileSync('./database/eventos.json', 'utf8');
         const eventos = JSON.parse(eventosJSON);
@@ -110,5 +110,33 @@ router.get('/payments', (req, res) => {
         res.status(500).send('Erro ao ler dados de pagamento.');
     }
 });
+
+router.get('/createevent', (req, res) => {
+    res.render('admin/createEvent')
+})
+
+router.post('/createevent', (req, res) => {
+    try {
+        const eventosJSON = fs.readFileSync('./database/eventos.json', 'utf8');
+        const eventos = JSON.parse(eventosJSON);
+
+        const { data, time1, time2 } = req.body;
+        eventos.evento = {
+            data: data,
+            time1: time1,
+            time2: time2
+        };
+
+        const eventosAtualizadosJSON = JSON.stringify(eventos, null, 2);
+        fs.writeFileSync('./database/eventos.json', eventosAtualizadosJSON);
+
+        res.redirect('/admin');
+        console.log('Evento criado com sucesso!');
+    } catch (error) {
+        console.error('Erro ao atualizar configuração da capacidade:', error);
+        res.status(500).send('Erro interno do servidor');
+    }
+});
+
 
 module.exports = router;

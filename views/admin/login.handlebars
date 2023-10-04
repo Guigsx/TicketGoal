@@ -5,13 +5,11 @@
     <body>
         <div class="login-container">
             <h1>Login</h1>
-            <!-- Formulário de Login -->
             <form action="/admin/login" method="POST">
                 <label for="pin">PIN de Acesso:</label>
                 <input type="password" id="pin" name="pin" required>
                 <button type="submit">Entrar</button>
             </form>
-            <!-- Mensagem de Erro -->
             {{#if error}}
             <p class="error">{{error}}</p>
             {{/if}}

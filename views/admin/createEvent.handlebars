@@ -1,0 +1,16 @@
+<header>
+    <h1>Painel de Controle</h1>
+</header>
+<main>
+    <h1>Criação de eventos.</h1>
+    <p>No mommento só é possível criar um evento por vez.</p>
+    <form action="/admin/createevent" method="POST">
+        <label for="data">Data:</label>
+        <input type="date" name="data" required>
+        <label for="time1">Primeiro time:</label>
+        <input type="text" name="time1" required>
+        <label for="time2">Segundo time:</label>
+        <input type="text" name="time2" required>
+        <button type="submit">Salvar</button>
+    </form>
+</main>
