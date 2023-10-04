@@ -210,3 +210,9 @@ span#valor-ingresso {
     text-align: center;
     font-size: 20px;
 }
+
+.error {
+    color: #f00;
+    font-weight: bold;
+    margin-top: 10px;
+}

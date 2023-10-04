@@ -3,6 +3,36 @@ const router = express.Router();
 const fs = require('fs')
 const assentosModule = require('./../assentos');
 
+const pinDeAcesso = '1234';
+
+function verificarAutenticacao(req, res, next) {
+    const autenticado = req.session.autenticado;
+    if (autenticado) {
+        next()
+    } else {
+        res.redirect('/admin/login');
+    }
+}
+
+// Rota para a página de login
+router.get('/login', (req, res) => {
+    res.render('admin/login');
+});
+
+router.post('/login', (req, res) => {
+    const { pin } = req.body;
+
+    if (pin === pinDeAcesso) {
+        req.session.autenticado = true;
+        res.redirect('/admin');
+    } else {
+        res.render('admin/login', { error: 'PIN incorreto' });
+    }
+});
+
+// Aplica o middleware de autenticação a todas as rotas abaixo
+router.use(verificarAutenticacao);
+
 // Rota de página inicial do painel de administração
 router.get('/', (req, res) => {
     const jsonContent = fs.readFileSync('./database/eventos.json', 'utf8');
