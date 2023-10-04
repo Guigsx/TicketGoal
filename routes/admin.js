@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs')
 const assentosModule = require('./../assentos');
-
-const pinDeAcesso = '1234';
+const config = require('./../config.json')
+const pinDeAcesso = config.pin
 
 function verificarAutenticacao(req, res, next) {
     const autenticado = req.session.autenticado;

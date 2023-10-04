@@ -3,7 +3,8 @@
 Bem-vindo ao TicketGoal, um sistema de gerenciamento de eventos que permite criar, configurar e vender ingressos para eventos esportivos e outros tipos de eventos em um estádio fictício.
 
 ```
-Fiz esse projeto como uma forma de estudar e testar os meus conhecimentos, sei que ainda há muito o que melhorar.```
+Fiz esse projeto como uma forma de estudar e testar os meus conhecimentos, sei que ainda há muito o que melhorar.
+```
 
 ## Visão Geral
 
@@ -23,7 +24,7 @@ Este projeto tem como objetivo criar um sistema de gerenciamento de eventos com 
 Antes de executar o projeto, certifique-se de ter instalado:
 
 - [Node.js](https://nodejs.org/) e [npm](https://www.npmjs.com/) (ou [Yarn](https://yarnpkg.com/)) para executar o servidor.
-- Um navegador da web moderno para acessar o sistema.
+- Um navegador da web para acessar o sistema.
 
 ## Configuração do Projeto
 
@@ -42,12 +43,17 @@ cd ticket-goal
 npm install
 ```
 
-4. Inicie o servidor
+4. Faça as configurações:
+```
+Vá até o arquivo config.json e altere as informações necessárias.
+```
+
+5. Inicie o servidor
 ```
 npm start
 ```
 
-5. Acesse o sistema em seu navegador em http://localhost:2000.
+6. Acesse o sistema em seu navegador em http://localhost:2000.
 
 ## Uso
 

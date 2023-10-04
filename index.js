@@ -9,7 +9,8 @@ const fs = require('fs')
 const sendEmail = require('./sendEmail');
 const assentos = require('./assentos')
 const admin = require('./routes/admin');
-const porta = 2000
+const config = require('./config.json')
+const porta = config.porta
 
 app.engine('handlebars', handlebars.engine({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
@@ -29,7 +30,7 @@ app.use(
 
 mercadopago.configure({
     sandbox: true, // Modo desenvolvimento
-    access_token: 'TEST-480121886035342-091514-97dd2e504361cbd467e0e948656ce7fd-1255551541'
+    access_token: config.access_token
 })
 
 const valoresIngresso = {
@@ -42,7 +43,6 @@ const valoresIngresso = {
 //função que salva os dados do pagamento no banco de dados local.
 function saveData(data) {
     try {
-        // Lê o conteúdo atual do arquivo JSON
         const currentData = fs.readFileSync('./database/dados.json', 'utf8');
         const parsedData = JSON.parse(currentData);
 
