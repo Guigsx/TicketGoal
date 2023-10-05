@@ -2,9 +2,9 @@
 
 Bem-vindo ao TicketGoal, um sistema de gerenciamento de eventos que permite criar, configurar e vender ingressos para eventos esportivos e outros tipos de eventos em um estádio fictício.
 
-```
+`
 Fiz esse projeto como uma forma de estudar e testar os meus conhecimentos, sei que ainda há muito o que melhorar.
-```
+`
 
 ## Visão Geral
 
